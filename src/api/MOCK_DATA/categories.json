@@ -1,0 +1,37 @@
+[
+  {
+    "id": "111",
+    "label": "Accounting",
+    "status": "active"
+  },
+  {
+    "id": "222",
+    "label": "Bookkeeping",
+    "status": "active"
+  },
+  {
+    "id": "333",
+    "label": "Communication",
+    "status": "active"
+  },
+  {
+    "id": "444",
+    "label": "Compliance",
+    "status": "active"
+  },
+  {
+    "id": "555",
+    "label": "eCommerce",
+    "status": "active"
+  },
+  {
+    "id": "666",
+    "label": "HRIS",
+    "status": "active"
+  },
+  {
+    "id": "777",
+    "label": "Payroll",
+    "status": "active"
+  }
+]
