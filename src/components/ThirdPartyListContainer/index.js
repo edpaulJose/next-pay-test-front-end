@@ -21,7 +21,10 @@ import NotifyEmailDialog from '../NotifyEmailDialog'
 // redux
 import { useSelector, useDispatch } from 'react-redux'
 import { retrieveThirdParties } from '../../redux/reducers/thirdParty/thirdPartyActions'
-import { thirdPartyListSelector, paginationSelector } from '../../redux/reducers/thirdParty/thirdPartyReducer'
+import { thirdPartyListSelector, paginationSelector, categoryFilterSelector, fieldFilterSelector } from '../../redux/reducers/thirdParty/thirdPartyReducer'
+
+// others
+import CantFindSearch from './pics/cantFindSearch.PNG'
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -41,13 +44,14 @@ const ThirdPartyListContainer = ({ id }) => {
     message: '',
   })
   const pagination = useSelector(paginationSelector)
+  const categories = useSelector(categoryFilterSelector)
+  const fieldStrFilter = useSelector(fieldFilterSelector)
 
   const pageCount = useMemo(() => Math.ceil(pagination?.total / pagination?.rowsPerPage), [pagination])
 
   useEffect(() => {
-    // dispatch(retrieveAllThirdParties())
-    dispatch(retrieveThirdParties({ rowsPerPage: DEFAULT_ROWS_PER_PAGE, currentPage: 0 }))
-  }, [dispatch])
+    dispatch(retrieveThirdParties({ rowsPerPage: DEFAULT_ROWS_PER_PAGE, currentPage: 0, filter: { categories, field: fieldStrFilter } }))
+  }, [dispatch, categories, fieldStrFilter])
 
   const handleNotifyClick = useCallback((id) => {
     setThirdPartyToNotify(id)
@@ -64,19 +68,19 @@ const ThirdPartyListContainer = ({ id }) => {
   }, [])
 
   const handlePagination = useCallback((event, page) => {
-    dispatch(retrieveThirdParties({ rowsPerPage: DEFAULT_ROWS_PER_PAGE, currentPage: page - 1 }))
-  }, [dispatch])
+    dispatch(retrieveThirdParties({ rowsPerPage: DEFAULT_ROWS_PER_PAGE, currentPage: page - 1, filter: { categories } }))
+  }, [dispatch, categories])
 
   const handleSelectPage = useCallback((event) => {
-    dispatch(retrieveThirdParties({ rowsPerPage: DEFAULT_ROWS_PER_PAGE, currentPage: event.target.value }))
-  }, [dispatch])
+    dispatch(retrieveThirdParties({ rowsPerPage: DEFAULT_ROWS_PER_PAGE, currentPage: event.target.value, filter: { categories } }))
+  }, [dispatch, categories])
 
-  return (
-    <div id={id} style={{ margin: '32px -16px' }}>
+  return pagination?.total > 0 ? (
+    <div id={id} style={{ margin: '32px -16px', width: '100%', justifyContent: 'center' }}>
       <Grid container rowSpacing={3}>
         {
           thirdPartyList?.map((thirdParty) =>
-            <Grid key={thirdParty.id} item xs={4}>
+            <Grid key={thirdParty.id} item xs={12} sm={12} md={4} xl={4}>
               <ThirdPartyCard
                 id={`ThirdPartyListContainer-ThirdPartyCard-${thirdParty.id}`}
                 categoryIds={thirdParty.categories}
@@ -99,6 +103,7 @@ const ThirdPartyListContainer = ({ id }) => {
                     page={pagination?.currentPage ? pagination.currentPage + 1 : 1}
                     onChange={handlePagination}
                     color='primary'
+                    size='small'
                   />
                 </Box>
                 <Box sx={{ marginRight: 1 }}>
@@ -113,6 +118,7 @@ const ThirdPartyListContainer = ({ id }) => {
                     onChange={handleSelectPage}
                     size='small'
                     margin='dense'
+                    sx={{ height: 30, fontSize: '12px', fontWeight: 400, color: '#828282' }}
                   >
                     {
                       [...Array(pageCount)].map((num, i) =>
@@ -138,7 +144,24 @@ const ThirdPartyListContainer = ({ id }) => {
         </Alert>
       </Snackbar>
     </div>
-  )
+  ) :
+    <div style={{ margin: '32px -16px', minWidth: '430px' }}>
+      <Grid container direction='column' justifyContent='center'>
+        <Grid item>
+          <img src={CantFindSearch} alt='Cannot find' />
+        </Grid>
+        <Grid item>
+          <Typography variant='h2' sx={{ fontSize: '20px', fontWeight: 600, color: '#828282' }}>
+            We can’t seem to find what you’re looking for.
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Typography variant='caption' sx={{ fontSize: '12px', fontWeight: 400, color: '#828282' }}>
+            Try changing the filters or search terms.
+          </Typography>
+        </Grid>
+      </Grid>
+    </div>
 }
 
 ThirdPartyListContainer.propTypes = propTypes

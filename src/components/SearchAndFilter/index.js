@@ -10,7 +10,8 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
 import CategoryPopper from "../CategoryPopper"
 
 // redux
-import { retrieveAllCategories, setSelectedCategories } from "../../redux/reducers/category/categoryActions"
+import { retrieveAllCategories } from "../../redux/reducers/category/categoryActions"
+import { setCategoryFilter, setFieldFilter } from "../../redux/reducers/thirdParty/thirdPartyActions"
 import { useDispatch } from 'react-redux'
 
 const propTypes = {
@@ -30,7 +31,6 @@ const SearchAndFilter = ({
   onSearch,
 }) => {
   const dispatch = useDispatch()
-  const [searchText, setSearchText] = useState('')
   const [openCategoryPopper, setOpenCategoryPopper] = useState(false)
   const [categoryPopperAnchorEl, setCategoryPopperAnchorEl] = useState(null)
 
@@ -42,9 +42,9 @@ const SearchAndFilter = ({
     if (event.key === 'Enter' || event.keyCode === 13) {
       onSearch(event.target.value)
     } else {
-      setSearchText(event.target.value)
+      dispatch(setFieldFilter(event.target.value))
     }
-  }, [onSearch])
+  }, [onSearch, dispatch])
 
   const handleFilter = useCallback((event) => {
     setCategoryPopperAnchorEl(event.currentTarget)
@@ -52,8 +52,7 @@ const SearchAndFilter = ({
   }, [])
 
   const handleCategoryApply = useCallback((values) => {
-    // console.log('Selected', values)
-    dispatch(setSelectedCategories(values))
+    dispatch(setCategoryFilter(values))
     setOpenCategoryPopper(false)
   }, [dispatch])
 
@@ -87,7 +86,16 @@ const SearchAndFilter = ({
         endIcon={openCategoryPopper ? <ArrowDropUpIcon fontSize='small' /> : <ArrowDropDownIcon fontSize='small' />}
         onClick={handleFilter}
       >
-        <Typography variant='body2' sx={{ fontSize: '12px', fontWeight: 600, lineHeight: '18px', letterSpacing: '0px', textAlign: 'center' }}>
+        <Typography
+          variant='body2'
+          sx={{
+            fontSize: '12px',
+            fontWeight: 600,
+            lineHeight: '18px',
+            letterSpacing: '0px',
+            textAlign: 'center',
+          }}
+        >
           Filter
         </Typography>
       </Button>

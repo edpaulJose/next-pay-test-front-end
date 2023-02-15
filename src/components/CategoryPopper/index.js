@@ -18,7 +18,8 @@ import CloseIcon from '@mui/icons-material/Close'
 
 // redux
 import { useSelector } from 'react-redux'
-import { categoryListSelector, selectedCategoriesSelector } from '../../redux/reducers/category/categoryReducer'
+import { categoryFilterSelector } from '../../redux/reducers/thirdParty/thirdPartyReducer'
+import { categoryListSelector } from '../../redux/reducers/category/categoryReducer'
 import { isNilOrEmptyArray } from '../../common/utils/StaticFunction'
 
 const propTypes = {
@@ -40,14 +41,14 @@ const defaultProps = {
 
 const CategoryPopper = ({ open, onApply, onClose, anchorEl, placement }) => {
   const categories = useSelector(categoryListSelector)
-  const selectedCategories = useSelector(selectedCategoriesSelector)
+  const selectedCategories = useSelector(categoryFilterSelector)
   const [checkedCategories, setCheckedCategories] = useState(null)
 
   const setSelectedCategories = useCallback(() => {
     if (!isNilOrEmptyArray(categories)) {
       const tempObj = {}
       categories?.forEach((category) =>
-        tempObj[category.id] = selectedCategories?.some((selectedCategory) => selectedCategory === category.id)
+        tempObj[category.id] = selectedCategories?.some((selectedCategory) => selectedCategory.id === category.id)
       )
       setCheckedCategories(tempObj)
     }

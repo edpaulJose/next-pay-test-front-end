@@ -8,8 +8,9 @@ import { isNilOrEmptyArray } from '../../common/utils/StaticFunction'
 
 // redux
 import { useSelector, useDispatch } from 'react-redux'
-import { setSelectedCategories } from '../../redux/reducers/category/categoryActions'
-import { categoryListSelector, selectedCategoriesSelector } from '../../redux/reducers/category/categoryReducer'
+import { categoryFilterSelector } from '../../redux/reducers/thirdParty/thirdPartyReducer'
+import { setCategoryFilter } from '../../redux/reducers/thirdParty/thirdPartyActions'
+import { categoryListSelector } from '../../redux/reducers/category/categoryReducer'
 
 const FilterChip = ({ id, label, onDelete }) => {
 
@@ -49,16 +50,16 @@ const propTypes = {
 const FilterChipContainer = ({ id }) => {
   const dispatch = useDispatch()
   const categories = useSelector(categoryListSelector)
-  const selectedCategories = useSelector(selectedCategoriesSelector)
+  const selectedCategories = useSelector(categoryFilterSelector)
 
   const categoriesToDisplay = useMemo(() =>
-    selectedCategories?.map((categoryId) => ({
-      id: categoryId,
-      label: categories?.find((category) => category.id === categoryId)?.label || '',
+    selectedCategories?.map((selectedCategory) => ({
+      id: selectedCategory.id,
+      label: categories?.find((category) => category.id === selectedCategory.id)?.label || '',
     })), [categories, selectedCategories])
 
   const handleDelete = useCallback((categoryId) => {
-    dispatch(setSelectedCategories(selectedCategories?.filter((selectedCategoryId) => selectedCategoryId !== categoryId)))
+    dispatch(setCategoryFilter(selectedCategories?.filter((selectedCategory) => selectedCategory.id !== categoryId)?.map((category) => category.id)))
   }, [selectedCategories, dispatch])
 
   return !isNilOrEmptyArray(categoriesToDisplay) ? (

@@ -23,3 +23,14 @@ export const validateField = (value, regexPattern = null) => {
     isError, helperText
   })
 }
+
+export const arraysHasSameValue = (array1 = [], array2 = []) => {
+  if (array2.length <= 0) {
+    return false
+  }
+  const combinedArray = array1.concat(array2)
+  const noDuplicates = new Set(combinedArray)
+  return combinedArray.length !== noDuplicates.size
+}
+
+export const removeSpecialCharacters = (str) => str.replaceAll(/[`~!@#$%^&*()_|+\-=?;:'’",.<>{}[\]\\/]/gi, '')

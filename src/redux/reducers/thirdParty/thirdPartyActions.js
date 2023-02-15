@@ -1,5 +1,5 @@
 import { getAllThirdParties, getThirdParties } from "../../../api/thirdPartyApi";
-import { updateThirdPartyList } from "./thirdPartyReducer";
+import { updateThirdPartyList, updateCategoryFilter, updateFieldFilter } from "./thirdPartyReducer";
 
 export const retrieveAllThirdParties = () => async (dispatch) => {
   const response = await getAllThirdParties()
@@ -9,22 +9,20 @@ export const retrieveAllThirdParties = () => async (dispatch) => {
   return response
 }
 
-export const retrieveThirdParties = (request) => async (dispatch) => {
-  const response = await getThirdParties(request)
+export const retrieveThirdParties = (request) => async (dispatch, getState) => {
+  const response = await getThirdParties({ ...request, categories: getState().category.dataList })
   if (response?.message === 'Success') {
     dispatch(updateThirdPartyList(response?.payload))
   }
   return response
 }
 
-// TODO: create filter here
-// Create a function to check if two arrays have duplicates (join then check for duplicates)
+export const setCategoryFilter = (categoryIds = []) => async (dispatch, getState) => {
+  const categories = getState().category.dataList
+  const selectedCategories = categories?.filter((category) => categoryIds.some((id) => category.id === id))
+  dispatch(updateCategoryFilter(selectedCategories))
+}
 
-// export const filterThirdParties = ({ type = 'categories', filter }) => async (dispatch) => {
-//   if(type === 'categories') {
-//     const response = await getAllThirdParties()
-//     if (response?.message === 'Success') {
-//       const filteredTP = response?.data?.filter((tp) => )
-//     }
-//   }
-// }
+export const setFieldFilter = (filterStr) => async (dispatch) => {
+  dispatch(updateFieldFilter(filterStr))
+}

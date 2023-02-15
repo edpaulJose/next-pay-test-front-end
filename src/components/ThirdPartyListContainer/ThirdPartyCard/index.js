@@ -63,6 +63,7 @@ const ThirdPartyCard = ({
       sx={{
         height: '302px',
         maxWidth: '442.67px',
+        minWidth: '300px',
         p: 3,
         m: 2,
         position: 'relative'
