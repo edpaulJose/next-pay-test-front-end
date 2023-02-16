@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import {
   Dialog,
@@ -84,7 +84,7 @@ const NotifyEmailDialog = ({ id, open, onClose, onNotify, thirdPartyId }) => {
   }, [])
 
   return (
-    <BootstrapDialog id={id} open={open}  >
+    <BootstrapDialog id={id} open={open} >
       <DialogTitle sx={{ m: 0, p: 2 }}>
         <IconButton
           aria-label="close"

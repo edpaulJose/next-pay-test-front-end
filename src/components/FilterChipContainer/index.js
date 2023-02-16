@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { Typography, Box, IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'

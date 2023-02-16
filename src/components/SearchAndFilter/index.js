@@ -1,7 +1,7 @@
-import { useEffect } from "react"
+import React, { useEffect } from "react"
 import { useCallback, useState } from "react"
 import PropTypes from 'prop-types'
-import { Paper, InputBase, Button, Typography } from '@mui/material'
+import { Paper, InputBase, Button } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
@@ -17,18 +17,15 @@ import { useDispatch } from 'react-redux'
 const propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string,
-  onSearch: PropTypes.func,
 }
 
 const defaultProps = {
   label: 'Search apps',
-  onSearch: () => { },
 }
 
 const SearchAndFilter = ({
   id,
   label,
-  onSearch,
 }) => {
   const dispatch = useDispatch()
   const [openCategoryPopper, setOpenCategoryPopper] = useState(false)
@@ -38,13 +35,9 @@ const SearchAndFilter = ({
     dispatch(retrieveAllCategories())
   }, [dispatch])
 
-  const handleOnKeyDown = useCallback((event) => {
-    if (event.key === 'Enter' || event.keyCode === 13) {
-      onSearch(event.target.value)
-    } else {
-      dispatch(setFieldFilter(event.target.value))
-    }
-  }, [onSearch, dispatch])
+  const handleTextFilterChange = useCallback((event) => {
+    dispatch(setFieldFilter(event.target.value))
+  }, [dispatch])
 
   const handleFilter = useCallback((event) => {
     setCategoryPopperAnchorEl(event.currentTarget)
@@ -72,7 +65,7 @@ const SearchAndFilter = ({
         autoFocus
         placeholder={label}
         inputProps={{ 'aria-label': label?.toLowerCase() }}
-        onKeyUp={handleOnKeyDown}
+        onChange={handleTextFilterChange}
       />
       <Button
         sx={{
@@ -81,23 +74,14 @@ const SearchAndFilter = ({
           borderLeft: '1px solid #BDBDBD',
           borderBottomLeftRadius: 0,
           borderTopLeftRadius: 0,
-          textTransform: 'none'
+          textTransform: 'none',
+          fontSize: '12px',
+          fontWeight: 600,
         }}
         endIcon={openCategoryPopper ? <ArrowDropUpIcon fontSize='small' /> : <ArrowDropDownIcon fontSize='small' />}
         onClick={handleFilter}
       >
-        <Typography
-          variant='body2'
-          sx={{
-            fontSize: '12px',
-            fontWeight: 600,
-            lineHeight: '18px',
-            letterSpacing: '0px',
-            textAlign: 'center',
-          }}
-        >
-          Filter
-        </Typography>
+        Filter
       </Button>
       <CategoryPopper
         id='SearchAndFilter-CategoryPopper'

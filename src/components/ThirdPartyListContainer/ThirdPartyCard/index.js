@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { styled } from '@mui/material/styles'
 import {
@@ -59,6 +59,7 @@ const ThirdPartyCard = ({
   return (
     <Paper
       id={id}
+      data-testid='ThirdPartyCard-root-test'
       elevation={2}
       sx={{
         height: '302px',

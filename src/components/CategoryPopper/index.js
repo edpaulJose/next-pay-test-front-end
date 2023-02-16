@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import {
   Popper,
@@ -39,10 +39,10 @@ const defaultProps = {
   placement: 'bottom-end'
 }
 
-const CategoryPopper = ({ open, onApply, onClose, anchorEl, placement }) => {
+const CategoryPopper = ({ id, open, onApply, onClose, anchorEl, placement }) => {
   const categories = useSelector(categoryListSelector)
   const selectedCategories = useSelector(categoryFilterSelector)
-  const [checkedCategories, setCheckedCategories] = useState(null)
+  const [checkedCategories, setCheckedCategories] = useState()
 
   const setSelectedCategories = useCallback(() => {
     if (!isNilOrEmptyArray(categories)) {
@@ -90,8 +90,10 @@ const CategoryPopper = ({ open, onApply, onClose, anchorEl, placement }) => {
     onClose()
   }, [onClose, setSelectedCategories])
 
+  const popperId = useMemo(() => open && Boolean(anchorEl) ? id : undefined, [id, open, anchorEl])
+
   return (
-    <Popper open={open} anchorEl={anchorEl} placement={placement} transition>
+    <Popper id={popperId} data-testid={`${popperId}-test`} open={open} anchorEl={anchorEl} placement={placement} transition>
       {({ TransitionProps }) => (
         <Fade {...TransitionProps}>
           <Paper sx={{ padding: 2, marginTop: 1, width: '354px' }}>
@@ -127,7 +129,7 @@ const CategoryPopper = ({ open, onApply, onClose, anchorEl, placement }) => {
                     control={
                       <Checkbox
                         size='small'
-                        checked={checkedCategories?.[category.id] || null}
+                        checked={checkedCategories?.[category.id] || false}
                         name={category.id}
                         onChange={(event) => handleCheckbox(event.target.checked, category.id)}
                         sx={{ '& .MuiSvgIcon-root': { fontSize: 14 } }}

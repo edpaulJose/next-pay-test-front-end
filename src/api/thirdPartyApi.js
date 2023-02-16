@@ -15,7 +15,7 @@ export const getAllThirdParties = () => {
         },
         message: 'Success'
       })
-    }, 1000)
+    }, 300)
   })
 }
 
@@ -57,6 +57,6 @@ export const getThirdParties = ({ rowsPerPage, currentPage, filter, categories }
         },
         message: 'Success'
       })
-    }, 1000)
+    }, 300)
   })
 }

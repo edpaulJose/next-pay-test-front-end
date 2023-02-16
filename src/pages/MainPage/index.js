@@ -1,3 +1,4 @@
+import React from "react"
 import SearchAndFilter from "../../components/SearchAndFilter"
 import FilterChipContainer from "../../components/FilterChipContainer"
 import ThirdPartyListContainer from "../../components/ThirdPartyListContainer"

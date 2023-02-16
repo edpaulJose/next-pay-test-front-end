@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, forwardRef, useMemo } from 'react'
+import React, { useCallback, useEffect, useState, forwardRef, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import {
   Grid,
@@ -99,6 +99,7 @@ const ThirdPartyListContainer = ({ id }) => {
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Box sx={{ flexGrow: 1 }}>
                   <Pagination
+                    data-testid='ThirdPartyListContainer-Pagination-test'
                     count={pageCount}
                     page={pagination?.currentPage ? pagination.currentPage + 1 : 1}
                     onChange={handlePagination}
